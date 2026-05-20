@@ -193,7 +193,9 @@ npm run seed
 
 Two composite indexes are required. These can be created manually in the Firebase Console or auto-provisioned via the Firestore CLI.
 
-**Index 1 — Paginated feed (available bags only, `quantityRemaining > 0`)**
+## Index 1 — All bags feed (no category filter)
+
+Used when `category === "all"`
 
 | Collection | Field               | Order      |
 | ---------- | ------------------- | ---------- |
@@ -201,7 +203,11 @@ Two composite indexes are required. These can be created manually in the Firebas
 | `bags`     | `createdAt`         | Descending |
 | `bags`     | `__name__`          | Descending |
 
-**Index 2 — Paginated feed filtered by category**
+---
+
+## Index 2 — Category filtered feed
+
+Used when `category === "bakery" | "restaurant" | "grocery"`
 
 | Collection | Field               | Order      |
 | ---------- | ------------------- | ---------- |
@@ -210,7 +216,16 @@ Two composite indexes are required. These can be created manually in the Firebas
 | `bags`     | `createdAt`         | Descending |
 | `bags`     | `__name__`          | Descending |
 
-Both indexes are scoped to **Collection** and must be in **Enabled** status before running the app.
+## Summary
+
+| Index | Purpose                              | Status     |
+| ----- | ------------------------------------ | ---------- |
+| 1     | All bags, ordered by quantity + date | ✅ Enabled |
+| 2     | Category filter                      | ✅ Enabled |
+
+All indexes are scoped to **Collection**.  
+Query filters out `quantityRemaining < 1` via `where("quantityRemaining", ">", 0)`.  
+Data refetches automatically on mount, reconnect, and window focus.
 
 ---
 

@@ -1,7 +1,9 @@
 import ErrorHandler from "@/components/errorHandler/errorHandling";
 import { ActivityLoader } from "@/components/loader/loader";
 import { useBags } from "@/hooks/bags/usebags";
-import { useTranslation } from "react-i18next";
+import { lang } from "@/i18n/i18Service";
+import { router } from "expo-router";
+import { Text, View } from "react-native";
 import MapView from "react-native-map-clustering";
 import { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,7 +16,6 @@ const RIYADH = {
 };
 
 const MapScreen = () => {
-  const { t, i18n } = useTranslation();
   const { data, isError, isLoading } = useBags();
   const bags = data?.pages.flatMap((p) => p.bags) ?? [];
 
@@ -30,9 +31,18 @@ const MapScreen = () => {
           latitude: bag.latitude!,
           longitude: bag.longitude!,
         }}
-        title={bag.name[i18n.language as "en" | "ar"]}
-        description={`${bag.priceSAR} ${t("SAR")}`}
-      />
+        onPress={() => router.push(`../bags/${bag.id}`)}
+      >
+        <View className="items-center">
+          <View className="bg-black px-2 py-1 rounded-full mb-1">
+            <Text className="text-white text-xs font-bold">
+              {bag.name[lang]}
+            </Text>
+          </View>
+
+          <View className="w-4 h-4 bg-black rounded-full border-2 border-white" />
+        </View>
+      </Marker>
     ));
 
   return (
