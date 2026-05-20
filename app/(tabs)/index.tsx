@@ -33,7 +33,6 @@ const ListScreen = () => {
     error,
   } = useBags(selectedCategory);
 
-  console.log({ error });
   const bags = data?.pages.flatMap((p) => p.bags) ?? [];
 
   if (isError) {

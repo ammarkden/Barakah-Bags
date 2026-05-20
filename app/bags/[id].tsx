@@ -20,24 +20,15 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const BagDetailScreen = () => {
-  const { id } = useLocalSearchParams<{
-    id: string;
-  }>();
-
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
-
   const router = useRouter();
 
   const { data: bag, isLoading, isError } = useBag(id);
   const { mutateAsync: reserveBag, isPending } = useReserveBag();
 
-  if (isLoading) {
-    return <ActivityLoader />;
-  }
-
-  if (isError || !bag) {
-    return <ErrorHandler />;
-  }
+  if (isLoading) return <ActivityLoader />;
+  if (isError || !bag) return <ErrorHandler />;
 
   const discount = Math.round(
     ((bag.originalPriceSAR - bag.priceSAR) / bag.originalPriceSAR) * 100,
@@ -49,7 +40,6 @@ const BagDetailScreen = () => {
         bagId: bag.id,
         totalSAR: bag.priceSAR,
       });
-
       router.push(`/confirmation/${reservationId}`);
     } catch (error) {
       console.log(error);
@@ -58,22 +48,33 @@ const BagDetailScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* Back button */}
+      <Pressable
+        onPress={() => router.back()}
+        className="absolute top-20 left-4 z-10 rounded-full bg-white/90 p-2 shadow-sm"
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+        }}
+      >
+        <Ionicons
+          name={lang === "ar" ? "arrow-forward" : "arrow-back"}
+          size={22}
+          color="#000"
+        />
+      </Pressable>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 140,
-        }}
+        contentContainerStyle={{ paddingBottom: 140 }}
       >
         <Animated.View entering={FadeInDown.springify()}>
           <View className="h-80 w-full overflow-hidden bg-neutral-100">
             <Image
-              source={{
-                uri: bag.imageUrl,
-              }}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
+              source={{ uri: bag.imageUrl }}
+              style={{ width: "100%", height: "100%" }}
               contentFit="cover"
               transition={250}
               cachePolicy="memory-disk"
@@ -98,11 +99,9 @@ const BagDetailScreen = () => {
               <Text className="text-2xl font-bold text-black text-left">
                 {`${bag.priceSAR} ${t("SAR")}`}
               </Text>
-
               <Text className="text-base text-neutral-400 line-through">
                 {`${bag.originalPriceSAR} ${t("SAR")}`}
               </Text>
-
               <View className="rounded-full bg-green-100 px-2 py-1">
                 <Text className="text-xs font-semibold text-green-700">
                   {`${t("save")} ${discount}%`}
@@ -117,27 +116,19 @@ const BagDetailScreen = () => {
           >
             <View className="flex-1 rounded-3xl bg-neutral-100 p-4 items-start">
               <Ionicons name="time-outline" size={20} color="#737373" />
-
               <Text className="mt-3 text-xs uppercase tracking-wide text-neutral-400 text-left">
                 {t("pickup_time")}
               </Text>
-
               <Text className="mt-1 font-semibold text-black text-left">
-                {`${dayjs(bag.pickupStart.toDate())
-                  .locale(lang)
-                  .format("h:mm A")} - ${dayjs(bag.pickupEnd.toDate())
-                  .locale(lang)
-                  .format("h:mm A")}`}
+                {`${dayjs(bag.pickupStart.toDate()).locale(lang).format("h:mm A")} - ${dayjs(bag.pickupEnd.toDate()).locale(lang).format("h:mm A")}`}
               </Text>
             </View>
 
             <View className="flex-1 rounded-3xl bg-neutral-100 p-4 items-start">
               <Ionicons name="cube-outline" size={20} color="#737373" />
-
               <Text className="mt-3 text-xs uppercase tracking-wide text-neutral-400 text-left">
                 {t("quantity_remaining")}
               </Text>
-
               <Text className="mt-1 font-semibold text-black text-left">
                 {bag.quantityRemaining}
               </Text>
@@ -153,14 +144,12 @@ const BagDetailScreen = () => {
         <View className="mb-4 flex-row items-center justify-between">
           <View>
             <Text className="text-sm text-neutral-400 line-through text-left">
-              {bag.originalPriceSAR} {t("SAR")}
+              {`${bag.originalPriceSAR} ${t("SAR")}`}
             </Text>
-
             <Text className="text-3xl font-bold text-black">
-              {bag.priceSAR} {t("SAR")}
+              {`${bag.priceSAR} ${t("SAR")}`}
             </Text>
           </View>
-
           <View className="rounded-full bg-green-100 px-3 py-2">
             <Text className="font-semibold text-green-700">
               {`${t("save")} ${discount}%`}
