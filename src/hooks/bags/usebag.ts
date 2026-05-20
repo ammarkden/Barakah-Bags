@@ -1,33 +1,39 @@
 import { db } from "@/api/firebase/client";
+
 import type { Bag } from "@/types/types";
-import { useQuery } from "@tanstack/react-query";
+
+import { useSyncExternalStore } from "react";
+
 import { doc, onSnapshot } from "firebase/firestore";
 
+let currentBag: Bag | null = null;
+
 export const useBag = (id?: string) => {
-  return useQuery({
-    queryKey: ["bag", id],
+  const bag = useSyncExternalStore(
+    (callback) => {
+      if (!id) {
+        return () => {};
+      }
 
-    enabled: !!id,
+      const bagRef = doc(db, "bags", id);
 
-    queryFn: async () => {
-      return await new Promise<Bag>((resolve, reject) => {
-        const bagRef = doc(db, "bags", id!);
+      return onSnapshot(bagRef, (snapshot) => {
+        if (snapshot.exists()) {
+          currentBag = snapshot.data() as Bag;
 
-        const unsubscribe = onSnapshot(
-          bagRef,
-          (snapshot) => {
-            if (!snapshot.exists()) {
-              reject(new Error("Bag not found"));
-              return;
-            }
-
-            resolve(snapshot.data() as Bag);
-          },
-          reject,
-        );
-
-        return () => unsubscribe();
+          callback();
+        }
       });
     },
-  });
+
+    () => currentBag,
+  );
+
+  return {
+    data: bag,
+
+    isLoading: !bag,
+
+    isError: false,
+  };
 };

@@ -1,8 +1,7 @@
 import { BagCard } from "@/components/bagCard/bagCard";
 import ErrorHandler from "@/components/errorHandler/errorHandling";
+import LanguageSwitcher from "@/components/languageSwitcher/languageSwitcher";
 import { useBags } from "@/hooks/bags/usebags";
-import { toggleLanguage } from "@/language/i18n/i18Service";
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,7 +19,7 @@ const categories = ["all", "bakery", "restaurant", "grocery"] as const;
 type Category = (typeof categories)[number];
 
 const ListScreen = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [selectedCategory, setSelectedCategory] = useState<Category>("all");
 
@@ -68,23 +67,20 @@ const ListScreen = () => {
                   {t("discover")}
                 </Text>
               </View>
-
-              <Pressable
-                onPress={toggleLanguage}
-                className="flex-row items-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-100 px-4 py-3 active:opacity-80"
-              >
-                <Ionicons name="language-outline" size={18} color="#737373" />
-
-                <Text className="font-medium text-black text-left">
-                  {i18n.language === "ar" ? "EN" : "AR"}
-                </Text>
-              </Pressable>
+              <LanguageSwitcher />
             </View>
 
-            <View className="mt-5 flex-row gap-2">
-              {categories.map((category) => (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={categories}
+              keyExtractor={(item) => item}
+              contentContainerStyle={{
+                gap: 8,
+                paddingTop: 20,
+              }}
+              renderItem={({ item: category }) => (
                 <Pressable
-                  key={category}
                   onPress={() => setSelectedCategory(category)}
                   className={`rounded-full px-4 py-2 ${
                     selectedCategory === category
@@ -102,8 +98,8 @@ const ListScreen = () => {
                     {t(category)}
                   </Text>
                 </Pressable>
-              ))}
-            </View>
+              )}
+            />
 
             {isLoading && (
               <View className="items-center justify-center py-12">
