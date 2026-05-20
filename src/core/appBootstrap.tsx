@@ -1,3 +1,6 @@
+import "../../global.css";
+import "../i18n";
+
 import { ActivityLoader } from "@/components/loader/loader";
 import { useAuth, useSignIn } from "@/hooks/auth/useAuth";
 import { Stack } from "expo-router";

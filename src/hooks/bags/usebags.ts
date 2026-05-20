@@ -32,14 +32,19 @@ export const useBags = (category: Category = "all") =>
   >({
     queryKey: ["bags", category],
     initialPageParam: null,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
 
     queryFn: async ({ pageParam }) => {
       const q = query(
         collection(db, "bags"),
         where("quantityRemaining", ">", 0),
-        orderBy("quantityRemaining"),
-        orderBy("createdAt", "desc"),
         ...(category !== "all" ? [where("category", "==", category)] : []),
+        orderBy("quantityRemaining"), // ✅ inequality field first
+        orderBy("createdAt", "desc"),
         ...(pageParam ? [startAfter(pageParam)] : []),
         limit(PAGE_SIZE),
       );
