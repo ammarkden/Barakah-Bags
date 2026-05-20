@@ -1,4 +1,4 @@
-import { BagCard } from "@/components/bagCard/bagCard";
+import BagCard from "@/components/bagCard/bagCard";
 import ErrorHandler from "@/components/errorHandler/errorHandling";
 import LanguageSwitcher from "@/components/languageSwitcher/languageSwitcher";
 import { useBags } from "@/hooks/bags/usebags";

@@ -1,10 +1,9 @@
 import type { LanguageDetectorAsyncModule } from "i18next";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-
 import { I18nManager } from "react-native";
-import ar from "../locale/ar.json";
-import en from "../locale/en.json";
+import ar from "./locale/ar.json";
+import en from "./locale/en.json";
 
 const languageDetector: LanguageDetectorAsyncModule = {
   type: "languageDetector",

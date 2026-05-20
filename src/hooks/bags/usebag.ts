@@ -1,10 +1,7 @@
 import { db } from "@/api/firebase/client";
-
 import type { Bag } from "@/types/types";
-
-import { useSyncExternalStore } from "react";
-
 import { doc, onSnapshot } from "firebase/firestore";
+import { useSyncExternalStore } from "react";
 
 let currentBag: Bag | null = null;
 

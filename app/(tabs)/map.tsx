@@ -1,14 +1,10 @@
 import ErrorHandler from "@/components/errorHandler/errorHandling";
 import { ActivityLoader } from "@/components/loader/loader";
 import { useBags } from "@/hooks/bags/usebags";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import MapView from "react-native-map-clustering";
 import { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const categories = ["all", "bakery", "restaurant", "grocery"] as const;
-type Category = (typeof categories)[number];
 
 const RIYADH = {
   latitude: 24.7136,
@@ -25,6 +21,20 @@ const MapScreen = () => {
   if (isLoading) return <ActivityLoader />;
   if (isError) return <ErrorHandler />;
 
+  const markers = bags
+    .filter((bag) => bag.latitude && bag.longitude)
+    .map((bag) => (
+      <Marker
+        key={bag.id}
+        coordinate={{
+          latitude: bag.latitude!,
+          longitude: bag.longitude!,
+        }}
+        title={bag.name[i18n.language as "en" | "ar"]}
+        description={`${bag.priceSAR} ${t("SAR")}`}
+      />
+    ));
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <MapView
@@ -36,16 +46,7 @@ const MapScreen = () => {
         animationEnabled
         clusterColor="#000"
       >
-        {bags.map((bag) =>
-          bag.latitude && bag.longitude ? (
-            <Marker
-              key={bag.id}
-              coordinate={{ latitude: bag.latitude, longitude: bag.longitude }}
-              title={bag.name[i18n.language as "en" | "ar"]}
-              description={`${bag.priceSAR} ${t("SAR")}`}
-            />
-          ) : null,
-        )}
+        {markers}
       </MapView>
     </SafeAreaView>
   );

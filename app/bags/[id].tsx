@@ -2,7 +2,7 @@ import ErrorHandler from "@/components/errorHandler/errorHandling";
 import { ActivityLoader } from "@/components/loader/loader";
 import { useBag } from "@/hooks/bags/usebag";
 import { useReserveBag } from "@/hooks/reservations/useCreateReservation";
-import { lang } from "@/language/i18n/i18Service";
+import { lang } from "@/i18n/i18Service";
 import { Ionicons } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";

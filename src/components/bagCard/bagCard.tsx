@@ -1,9 +1,7 @@
+import { lang } from "@/i18n/i18Service";
 import { Bag } from "@/types/types";
-
-import { useRouter } from "expo-router";
-
-import { lang } from "@/language/i18n/i18Service";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -13,7 +11,7 @@ type Props = {
   index: number;
 };
 
-export function BagCard({ item, index }: Props) {
+const BagCard = ({ item, index }: Props) => {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -54,4 +52,5 @@ export function BagCard({ item, index }: Props) {
       </Pressable>
     </Animated.View>
   );
-}
+};
+export default BagCard;

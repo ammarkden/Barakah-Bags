@@ -1,4 +1,4 @@
-import { toggleLanguage } from "@/language/i18n/i18Service";
+import { toggleLanguage } from "@/i18n/i18Service";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { Pressable, Text } from "react-native";

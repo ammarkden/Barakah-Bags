@@ -12,20 +12,20 @@ function resolveAuthUser(): Promise<User | null> {
   });
 }
 
-export function useAuth() {
+export const useAuth = () => {
   return useQuery({
     queryKey: ["auth"],
     queryFn: resolveAuthUser,
     staleTime: Infinity,
     retry: false,
   });
-}
+};
 
-export function useSignIn() {
+export const useSignIn = () => {
   return useMutation({
     mutationFn: () => signInAnonymously(auth),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
-}
+};
