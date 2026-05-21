@@ -50,6 +50,7 @@ Barakah Bags is a food-rescue platform that reduces waste by enabling users to d
 | Internationalization | i18next                    |
 | Animations           | Reanimated                 |
 | Image Rendering      | Expo Image                 |
+| Date Handling        | Day.js                     |
 
 ---
 
@@ -62,6 +63,17 @@ Barakah Bags is a food-rescue platform that reduces waste by enabling users to d
 - 🖼️ **Optimized Image Rendering** — Expo Image for caching and performance
 - ⚠️ **Complete State Handling** — Loading, empty, and error states across all screens
 - 🌱 **Seed Script** — Faker-powered Firestore seeder with ~35 mock bags
+
+---
+
+## Date Formatting
+
+The app uses Day.js for lightweight and consistent date formatting.
+
+```ts
+import dayjs from "dayjs";
+
+const formattedDate = dayjs(createdAt).format("DD MMM YYYY");```
 
 ---
 
